@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useCallback, useMemo, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePrototypeStore } from "@/store/usePrototypeStore";
 import { STORAGE_KEY } from "@/store/seed";
 import {
@@ -38,7 +38,6 @@ export default function MyAccountChrome({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const bagCount = usePrototypeStore((s) => s.ui.bagCount);
 
   const activeHref = useMemo(() => {
@@ -61,7 +60,14 @@ export default function MyAccountChrome({
     }
   }, []);
 
-  const showDevtools = searchParams?.get("devtools") === "1";
+  const [showDevtools, setShowDevtools] = useState(false);
+  useEffect(() => {
+    try {
+      setShowDevtools(new URLSearchParams(window.location.search).get("devtools") === "1");
+    } catch {
+      setShowDevtools(false);
+    }
+  }, []);
 
   return (
     <div className="min-h-dvh bg-white text-black">

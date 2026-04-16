@@ -57,7 +57,10 @@ export type PrototypeState = SeedState & {
       reason: "Lost label" | "Never received" | "Other";
     }) => { labelReference: string } | { error: string };
     updateUser: (
-      patch: Partial<SeedState["user"]> & {
+      patch: Omit<
+        Partial<SeedState["user"]>,
+        "marketingPrefs" | "twoFactor" | "signIn"
+      > & {
         marketingPrefs?: Partial<SeedState["user"]["marketingPrefs"]>;
         twoFactor?: Partial<SeedState["user"]["twoFactor"]>;
         signIn?: Partial<SeedState["user"]["signIn"]>;
